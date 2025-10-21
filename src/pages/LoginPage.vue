@@ -1,5 +1,14 @@
 <template>
-  <q-page class="flex flex-center" style="background-color: #91ffff; min-height: 100vh">
+  <q-page
+    class="flex flex-center"
+    style="
+      background-image: url('/images/wea.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      min-height: 100vh;
+    "
+  >
     <q-card
       class="row no-wrap shadow-2"
       style="width: 800px; max-width: 95vw; border-radius: 20px; overflow: hidden"
