@@ -1,20 +1,17 @@
+import { boot } from 'quasar/wrappers'
 import axios from 'axios'
 
-// Detecta si estás en desarrollo o producción
+// Detectar si estamos en local o producción
 const baseURL =
-  process.env.NODE_ENV === 'development'
-    ? 'https://localhost:7225/api' // localhost para pruebas
-    : 'https://lavanderiaburbuclean.somee.com/api' // producción en Somee
+  window.location.hostname === 'localhost'
+    ? 'https://localhost:7255/api'
+    : 'https://lavanderiaburbuclean.somee.com/api'
 
-// Configura instancia
 const api = axios.create({
-  baseURL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  baseURL, // se ajusta automáticamente según el entorno
 })
 
-// Interceptor para token
+// Interceptor para agregar token si existe
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token')
   if (token) {
@@ -23,4 +20,9 @@ api.interceptors.request.use((config) => {
   return config
 })
 
-export default api
+export default boot(({ app }) => {
+  app.config.globalProperties.$axios = axios
+  app.config.globalProperties.$api = api
+})
+
+export { axios, api }
