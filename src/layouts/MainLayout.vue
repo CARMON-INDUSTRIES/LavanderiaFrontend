@@ -12,7 +12,7 @@
         <q-btn flat label="Gastos" @click="irA('/gasto')" />
         <q-btn flat label="Pagos Empleados" @click="irA('/pago-empleados')" />
         <q-btn flat label="Resumen Semanal" @click="irA('/resumen-semanal')" />
-        <q-btn flat label="Cerrar Sesion" @click="irA('/login')" />
+        <q-btn flat label="Cerrar Sesion" @click="irA('/')" />
       </q-toolbar>
     </q-header>
 
