@@ -46,7 +46,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { Notify } from 'quasar'
-import api from 'src/boot/api'
+import api from 'src/boot/axios'
 
 const form = ref({
   user: '',
