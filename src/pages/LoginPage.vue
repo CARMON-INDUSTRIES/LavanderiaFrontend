@@ -96,6 +96,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { api } from 'boot/axios'
+import { jwtDecode } from 'jwt-decode'
 
 const usuario = ref('')
 const password = ref('')
@@ -104,7 +105,6 @@ const router = useRouter()
 const $q = useQuasar()
 const loginForm = ref(null)
 
-// Enter para enviar
 onMounted(() => {
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
@@ -123,7 +123,13 @@ const handleLogin = async () => {
     const token = response.data.token
     localStorage.setItem('token', token)
 
-    $q.notify({ type: 'positive', message: 'Inicio de sesión exitoso' })
+    // 🔍 Decodificar token para obtener el rol
+    const decoded = jwtDecode(token)
+    const rol = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
+    localStorage.setItem('rol', rol)
+
+    $q.notify({ type: 'positive', message: `Inicio de sesión exitoso (${rol})` })
+
     router.replace('/principal')
   } catch (error) {
     $q.notify({

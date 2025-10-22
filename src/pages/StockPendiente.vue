@@ -33,6 +33,7 @@
         class="q-mt-md"
         no-data-label="No hay pedidos"
       >
+        <!-- Columna Estado con chip clickeable -->
         <template v-slot:body-cell-estado="props">
           <q-td :props="props">
             <q-chip
@@ -53,6 +54,7 @@
           </q-td>
         </template>
 
+        <!-- Columna Prendas -->
         <template v-slot:body-cell-prendas="props">
           <q-td :props="props">
             <div v-if="props.row.prendas?.length">
@@ -61,6 +63,16 @@
               </div>
             </div>
             <div v-else class="text-caption text-grey">—</div>
+          </q-td>
+        </template>
+
+        <!-- Columna Último cambio -->
+        <template v-slot:body-cell-fechaCambioEstado="props">
+          <q-td :props="props">
+            <span v-if="props.row.fechaCambioEstado">
+              {{ formatDate(props.row.fechaCambioEstado) }}
+            </span>
+            <span v-else class="text-grey">—</span>
           </q-td>
         </template>
       </q-table>
@@ -78,8 +90,9 @@ const $q = useQuasar()
 const pedidos = ref([])
 const loading = ref(false)
 const search = ref('')
-const processingId = ref(null) // id del pedido que está cambiando de estado
+const processingId = ref(null)
 
+// 🧱 Columnas de la tabla
 const columns = [
   { name: 'id', label: 'ID', field: 'id', align: 'left', sortable: true },
   {
@@ -105,16 +118,23 @@ const columns = [
   },
   { name: 'prendas', label: 'Prendas', field: 'prendas', align: 'left' },
   { name: 'estado', label: 'Estado', field: 'estado', align: 'center' },
+  {
+    name: 'fechaCambioEstado',
+    label: 'Último cambio',
+    field: (row) => formatDate(row.fechaCambioEstado),
+    align: 'left',
+    sortable: true,
+  },
 ]
 
+// 🕒 Formateo de fecha
 function formatDate(value) {
-  if (!value && value !== 0) return ''
+  if (!value) return ''
   const d = new Date(value)
-  if (isNaN(d.getTime())) return String(value)
-  return d.toLocaleString()
+  return isNaN(d.getTime()) ? String(value) : d.toLocaleString()
 }
 
-// Cargar pedidos desde API
+// 📦 Cargar pedidos desde API
 const cargarPedidos = async () => {
   loading.value = true
   try {
@@ -135,27 +155,29 @@ const cargarPedidos = async () => {
   }
 }
 
-// Cambiar estado local y en backend
+// 🔁 Cambiar estado local y en backend
 const cambiarEstado = async (pedido) => {
-  if (processingId.value) return // evita doble click
+  if (processingId.value) return
   processingId.value = pedido.id
 
   const nuevoEstado = pedido.estado === 'Entregado' ? 'Pendiente' : 'Entregado'
 
   try {
-    // Llamada al backend
-    await api.put(
+    // PUT al backend
+    const res = await api.put(
       `/pedido/${pedido.id}/estado`,
       { nuevoEstado },
-      {
-        headers: { 'Content-Type': 'application/json' },
-      },
+      { headers: { 'Content-Type': 'application/json' } },
     )
 
-    // Actualizar localmente
+    // Actualiza localmente sin recargar todo
     pedido.estado = nuevoEstado
+    pedido.fechaCambioEstado = res.data?.fechaCambioEstado || new Date()
 
-    $q.notify({ type: 'positive', message: `Estado actualizado a "${nuevoEstado}"` })
+    $q.notify({
+      type: 'positive',
+      message: `Estado actualizado a "${nuevoEstado}"`,
+    })
   } catch (err) {
     console.error(err)
     $q.notify({ type: 'negative', message: 'No se pudo actualizar el estado' })
@@ -164,7 +186,7 @@ const cambiarEstado = async (pedido) => {
   }
 }
 
-// Filtrado por búsqueda y solo mostrar pendientes
+// 🔍 Filtro de búsqueda
 const visiblePedidos = computed(() => {
   const term = (search.value || '').toLowerCase().trim()
   return pedidos.value.filter((p) => {

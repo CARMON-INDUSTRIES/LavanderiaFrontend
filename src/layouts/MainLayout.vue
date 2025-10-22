@@ -1,22 +1,23 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <!-- Navbar superior -->
     <q-header elevated>
       <q-toolbar>
-        <q-toolbar-title> Lavandería Burbuclean</q-toolbar-title>
+        <q-toolbar-title>Lavandería Burbuclean</q-toolbar-title>
 
-        <!-- Botones de navegación -->
+        <!-- Botones visibles según rol -->
         <q-btn flat label="Inicio" @click="irA('/principal')" />
+
         <q-btn flat label="Pedidos" @click="irA('/pedido-lista')" />
         <q-btn flat label="Stock" @click="irA('/stock-pendiente')" />
-        <q-btn flat label="Gastos" @click="irA('/gasto')" />
-        <q-btn flat label="Pagos Empleados" @click="irA('/pago-empleados')" />
-        <q-btn flat label="Resumen Semanal" @click="irA('/resumen-semanal')" />
-        <q-btn flat label="Cerrar Sesion" @click="irA('/')" />
+
+        <q-btn v-if="esAdmin" flat label="Gastos" @click="irA('/gasto')" />
+        <q-btn v-if="esAdmin" flat label="Pagos Empleados" @click="irA('/pago-empleados')" />
+        <q-btn v-if="esAdmin" flat label="Resumen Semanal" @click="irA('/resumen-semanal')" />
+
+        <q-btn flat label="Cerrar Sesión" @click="cerrarSesion" />
       </q-toolbar>
     </q-header>
 
-    <!-- Contenedor de páginas -->
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -25,17 +26,24 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
+import { ref, onMounted, computed } from 'vue' // 👈 Agregado aquí
 
 const router = useRouter()
+const rol = ref(null)
+
+onMounted(() => {
+  rol.value = localStorage.getItem('rol')
+})
+
+const esAdmin = computed(() => rol.value === 'Admin')
 
 const irA = (ruta) => {
   router.push(ruta)
 }
-</script>
 
-<style scoped>
-/* Estilos opcionales para botones de la navbar */
-.q-toolbar .q-btn {
-  margin-left: 8px;
+const cerrarSesion = () => {
+  localStorage.removeItem('token')
+  localStorage.removeItem('rol')
+  router.replace('/')
 }
-</style>
+</script>
