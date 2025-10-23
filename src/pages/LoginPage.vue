@@ -13,15 +13,18 @@
       class="row no-wrap shadow-2"
       style="width: 800px; max-width: 95vw; border-radius: 20px; overflow: hidden"
     >
-      <!-- Lado izquierdo: Formulario -->
-      <q-card-section class="col-6 q-pa-xl" style="background-color: white">
+      <!-- 🧩 Formulario (izquierda en desktop, único en móvil) -->
+      <q-card-section
+        class="col-12 col-md-6 q-pa-xl flex flex-center"
+        style="background-color: white"
+      >
         <q-form
           @submit.prevent="handleLogin"
           ref="loginForm"
           class="q-gutter-md"
-          style="width: 100%"
+          style="width: 100%; max-width: 350px"
         >
-          <!-- Logo centrado -->
+          <!-- Logo -->
           <div class="flex flex-center q-mb-md">
             <q-img
               src="/images/logo.jpg"
@@ -29,7 +32,7 @@
             />
           </div>
 
-          <!-- Título y subtítulo -->
+          <!-- Títulos -->
           <div class="text-h5 text-dark text-bold text-center q-mb-sm">Iniciar Sesión</div>
           <div class="text-caption text-grey-7 text-center q-mb-lg" style="color: #555">
             Bienvenido, ingresa tus credenciales para continuar
@@ -80,8 +83,12 @@
         </q-form>
       </q-card-section>
 
-      <!-- Lado derecho: Imagen decorativa -->
-      <q-card-section class="col-6 flex flex-center" style="background-color: white">
+      <!-- 🖼 Imagen decorativa: solo visible en pantallas medianas o mayores -->
+      <q-card-section
+        v-if="$q.screen.gt.sm"
+        class="col-6 flex flex-center"
+        style="background-color: white"
+      >
         <q-img
           src="/images/lavadora.jpg"
           style="max-width: 100%; max-height: 400px; border-radius: 20px; object-fit: cover"
@@ -123,13 +130,12 @@ const handleLogin = async () => {
     const token = response.data.token
     localStorage.setItem('token', token)
 
-    // 🔍 Decodificar token para obtener el rol
+    // Decodificar token para obtener el rol
     const decoded = jwtDecode(token)
     const rol = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
     localStorage.setItem('rol', rol)
 
     $q.notify({ type: 'positive', message: `Inicio de sesión exitoso (${rol})` })
-
     router.replace('/principal')
   } catch (error) {
     $q.notify({
