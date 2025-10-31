@@ -135,12 +135,12 @@ const handleLogin = async () => {
     const rol = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
     localStorage.setItem('rol', rol)
 
-    $q.notify({ type: 'positive', message: `Inicio de sesión exitoso (${rol})` })
+    $q.notify({ type: 'positive', message: `Buenos dias, Usuario!)` })
     router.replace('/principal')
   } catch (error) {
     $q.notify({
       type: 'negative',
-      message: error.response?.data?.message || 'Error al iniciar sesión',
+      message: error.response?.data?.message || 'Verifica tu conexión a internet',
     })
     console.error(error)
   }

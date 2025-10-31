@@ -153,10 +153,11 @@
 import { ref, onMounted } from 'vue'
 import { api } from 'boot/axios'
 import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router'
 
 const $q = useQuasar()
+const router = useRouter()
 
-// Pedido con nuevos campos
 const pedido = ref({
   clienteId: null,
   fechaEntrega: '',
@@ -172,7 +173,6 @@ const pedido = ref({
 const clientes = ref([])
 const cargandoClientes = ref(false)
 
-// Modal y nuevo cliente
 const modalCliente = ref(false)
 const nuevoCliente = ref({ nombre: '', telefono: '', direccion: '' })
 
@@ -193,24 +193,22 @@ const obtenerClientes = async () => {
   }
 }
 
-// 🔥 Guardar pedido y sus detalles
 const guardarPedido = async () => {
   try {
-    // 1️⃣ Guardar pedido
     const resPedido = await api.post('/pedido', pedido.value)
     const pedidoId = resPedido.data.id
 
-    // 2️⃣ Guardar detalles de las prendas
     for (const prenda of pedido.value.prendas) {
       await api.post('/detallePedido', {
         pedidoId,
         tipoPrenda: prenda.nombre,
         servicio: prenda.servicio,
-        precio: prenda.precio || 0, // si quieres agregar precio individual
+        precio: prenda.precio || 0,
       })
     }
 
     $q.notify({ type: 'positive', message: 'Pedido guardado correctamente' })
+    router.push('/ticket') // Ajusta esta ruta según cómo se llame tu página de servicio
 
     // Resetear formulario
     pedido.value = {

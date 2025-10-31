@@ -104,6 +104,17 @@ const routes = [
     ],
   },
   {
+    path: '/ticket',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('src/pages/TicketGenerado.vue'),
+        meta: { requiresAuth: true },
+      },
+    ],
+  },
+  {
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue'),
   },
