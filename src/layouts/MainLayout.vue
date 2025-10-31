@@ -2,6 +2,10 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
+        <q-img
+          src="/images/logo.jpg"
+          style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover"
+        />
         <q-toolbar-title>Lavandería Burbuclean</q-toolbar-title>
 
         <!-- Botones visibles según rol -->
