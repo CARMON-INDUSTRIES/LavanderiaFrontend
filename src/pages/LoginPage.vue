@@ -49,7 +49,11 @@
             autofocus
             dense
             class="q-mb-sm"
-          />
+          >
+            <template v-slot:prepend>
+              <q-icon name="person" color="grey-7" />
+            </template>
+          </q-input>
 
           <q-input
             filled
@@ -61,6 +65,9 @@
             dense
             class="q-mb-sm"
           >
+            <template v-slot:prepend>
+              <q-icon name="lock" color="grey-7" />
+            </template>
             <template v-slot:append>
               <q-icon
                 :name="showPassword ? 'visibility_off' : 'visibility'"
