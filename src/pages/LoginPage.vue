@@ -13,7 +13,6 @@
       class="row no-wrap shadow-2"
       style="width: 800px; max-width: 95vw; border-radius: 20px; overflow: hidden"
     >
-      <!-- 🧩 Formulario (izquierda en desktop, único en móvil) -->
       <q-card-section
         class="col-12 col-md-6 q-pa-xl flex flex-center"
         style="background-color: white"
@@ -44,11 +43,8 @@
             v-model="usuario"
             label="Usuario"
             type="text"
-            lazy-rules
-            :rules="[(val) => !!val || 'Campo requerido']"
-            autofocus
             dense
-            class="q-mb-sm"
+            class="q-mb-md custom-input"
           >
             <template v-slot:prepend>
               <q-icon name="person" color="grey-7" />
@@ -63,7 +59,7 @@
             lazy-rules
             :rules="[(val) => !!val || 'Campo requerido']"
             dense
-            class="q-mb-sm"
+            class="q-mb-sm custom-input"
           >
             <template v-slot:prepend>
               <q-icon name="lock" color="grey-7" />
@@ -82,10 +78,11 @@
             label="INGRESAR"
             color="blue"
             text-color="white"
-            class="full-width q-mt-lg"
+            class="custom-btn"
             unelevated
             type="submit"
-            style="border-radius: 15px; height: 45px"
+            :loading="loading"
+            style="width: 95%"
           />
         </q-form>
       </q-card-section>
@@ -154,3 +151,61 @@ const handleLogin = async () => {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.login-page {
+  min-height: 100vh;
+  background: url('/images/bien.jpg') no-repeat center center;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-card {
+  max-width: 900px;
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.25),
+    0 4px 10px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.form-side {
+  background: rgba(255, 255, 255, 0.95);
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.img-side {
+  background: #fff;
+}
+
+.custom-input :deep(.q-field__control) {
+  border-radius: 12px;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.custom-input :deep(.q-field__control:hover),
+.custom-input :deep(.q-field__control:focus-within) {
+  box-shadow: 0 0 0 2px rgba(105, 27, 49, 0.4);
+}
+
+.custom-btn {
+  border-radius: 12px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  background: linear-gradient(100deg, #0077ff, #ff00ff);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(105, 27, 49, 0.3);
+  transition: all 0.2s ease;
+}
+
+.custom-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 102, 255, 0.4);
+}
+</style>
