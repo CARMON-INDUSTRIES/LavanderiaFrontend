@@ -63,6 +63,7 @@
             >
               <q-input v-model="prenda.nombre" label="Nombre prenda" outlined dense class="col" />
               <q-input v-model="prenda.servicio" label="Servicio" outlined dense class="col" />
+              <q-input v-model="prenda.precio" label="Precio" outlined dense class="col" />
               <q-btn
                 flat
                 icon="delete"

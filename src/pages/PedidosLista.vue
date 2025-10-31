@@ -93,6 +93,12 @@ export default {
         align: 'left',
       },
       {
+        name: 'metodoPago',
+        label: 'Metodo de Pago',
+        field: (row) => row.metodoPago || '—',
+        align: 'left',
+      },
+      {
         name: 'fechaIngreso',
         label: 'Fecha Ingreso',
         field: (row) => new Date(row.fechaIngreso).toLocaleDateString(),

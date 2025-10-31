@@ -147,7 +147,8 @@ const handleLogin = async () => {
   } catch (error) {
     $q.notify({
       type: 'negative',
-      message: error.response?.data?.message || 'Verifica tu conexión a internet',
+      message:
+        error.response?.data?.message || 'Verifica tu conexión a internet o contacta a soporte',
     })
     console.error(error)
   }
