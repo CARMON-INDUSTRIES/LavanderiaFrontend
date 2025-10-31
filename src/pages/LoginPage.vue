@@ -135,7 +135,7 @@ const handleLogin = async () => {
     const rol = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
     localStorage.setItem('rol', rol)
 
-    $q.notify({ type: 'positive', message: `Buenos dias, Usuario!)` })
+    $q.notify({ type: 'positive', message: `Buenos dias, Usuario!` })
     router.replace('/principal')
   } catch (error) {
     $q.notify({

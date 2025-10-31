@@ -81,6 +81,18 @@ export default {
         align: 'left',
       },
       {
+        name: 'direccion',
+        label: 'Direccion',
+        field: (row) => row.cliente?.direccion || '—',
+        align: 'left',
+      },
+      {
+        name: 'telefono',
+        label: 'Telefono',
+        field: (row) => row.cliente?.telefono || '—',
+        align: 'left',
+      },
+      {
         name: 'fechaIngreso',
         label: 'Fecha Ingreso',
         field: (row) => new Date(row.fechaIngreso).toLocaleDateString(),
