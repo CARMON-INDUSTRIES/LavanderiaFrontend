@@ -1,5 +1,6 @@
 <template>
   <q-page padding class="flex flex-center">
+    <!-- Vista previa del ticket -->
     <div
       id="ticket"
       style="
@@ -13,13 +14,13 @@
       "
     >
       <div class="text-center">
-        <div class="text-h6">
+        <div class="text-sub-1">
           Lavandería y Tintorería <br />
           Burbu Clean
         </div>
-        <div style="font-size: 12px">Tel: 55 3864 4860</div>
-        <div style="font-size: 12px">Tel: 55 1894 4538</div>
-        <div style="font-size: 12px">--------------------------------</div>
+        <div style="font-size: 10px">Tel: 55 3864 4860</div>
+        <div style="font-size: 10px">Tel: 55 1894 4538</div>
+        <div style="font-size: 10px">-------------------------------</div>
       </div>
 
       <div style="font-size: 12px; margin-top: 5px">
@@ -29,16 +30,15 @@
         <div><b>Entrega:</b> {{ formatDate(pedido.fechaEntrega) }}</div>
       </div>
 
-      <div style="margin-top: 10px; font-size: 12px">
+      <div style="margin-top: 10px; font-size: 10px">
         <div class="text-center"><b>--- Detalle de prendas ---</b></div>
         <div
           v-for="(d, i) in pedido.detalles"
           :key="i"
           class="row justify-between"
-          style="font-size: 12px"
+          style="font-size: 10px"
         >
           <div>{{ d.tipoPrenda }} ({{ d.servicio }})</div>
-          <!-- <div>${{ d.precio.toFixed(2) }}</div> -->
         </div>
       </div>
 
@@ -51,16 +51,20 @@
         </div>
       </div>
 
-      <div class="text" style="margin-top: 10px; font-size: 9px">
-        • El agente no está autorizado para entregar ninguna orden si no está liquidada. <br />
-        • Toda prenda que venga al servicio de esta casa se considera usada. <br />
+      <div class="text" style="margin-top: 10px; font-size: 8px">
+        • El agente no está autorizado para
+        <br />entregar ninguna orden si no está liquidada. <br />
+        • Toda prenda que venga al servicio de
+        <br />esta casa se considera usada. <br />
         • No respondemos por objetos olvidados. <br />
         • Todo secado encoge. <br />
-        • En caso de pérdida, la casa pagará la cuarta parte de la prenda. <br />
-        • No nos hacemos responsables por pérdida de ropa interior. <br />
+        • En caso de pérdida, la casa pagará
+        <br />la cuarta parte de la prenda. <br />
+        • No nos hacemos responsables por
+        <br />pérdida de ropa interior. <br />
         • La carga mínima por cobrar será de $50 pesos. <br />
 
-        <div class="text-center" style="margin-top: 10px; font-size: 9px">
+        <div class="text-left" style="margin-top: 9px; font-size: 9px">
           ¡Gracias por su preferencia!
         </div>
       </div>
@@ -68,8 +72,7 @@
 
     <!-- Botones -->
     <div class="column q-ml-md">
-      <q-btn color="primary" label="Imprimir (Navegador)" @click="imprimirTicket" class="q-mb-sm" />
-      <q-btn color="teal" label="Imprimir con QZ Tray" @click="imprimirConQZ" class="q-mb-sm" />
+      <q-btn color="primary" label="Imprimir ticket" @click="imprimirTicket" class="q-mb-sm" />
       <q-btn flat color="secondary" label="Volver" @click="router.back()" />
     </div>
   </q-page>
@@ -79,13 +82,11 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { api } from 'boot/axios'
-import { useQuasar } from 'quasar'
-import qz from 'qz-tray'
 
 const router = useRouter()
-const $q = useQuasar()
 const pedido = ref({})
 
+// ==================== Cargar último pedido ====================
 onMounted(async () => {
   await cargarUltimoPedido()
 })
@@ -110,76 +111,54 @@ const formatDate = (fecha) => {
   })
 }
 
-// ---------- Impresión con ventana del navegador ----------
+// ==================== Impresión con ventana del navegador ====================
 const imprimirTicket = () => {
   const ticket = document.getElementById('ticket').innerHTML
+
   const ventana = window.open('', '', 'width=400,height=600')
   ventana.document.write(`
     <html>
       <head>
         <title>Ticket</title>
         <style>
+          @page {
+            size: 58mm auto;
+            margin: 0;
+          }
+
+          @media print {
+            body {
+              margin: 0;
+              padding: 0;
+            }
+            #ticket {
+              border: none !important;
+              border-radius: 0 !important;
+              padding: 0 !important;
+              width: 58mm;
+            }
+          }
+
           body {
             font-family: 'Courier New', monospace;
             font-size: 12px;
             width: 58mm;
+            margin: 0;
+            padding: 0;
+            color: black;
           }
+
           .text-center { text-align: center; }
           .row { display: flex; justify-content: space-between; }
         </style>
       </head>
       <body onload="window.print();window.close();">
-        ${ticket}
+        <div id="ticket">
+          ${ticket}
+        </div>
       </body>
     </html>
   `)
   ventana.document.close()
-}
-
-// ---------- Impresión directa con QZ Tray ----------
-const imprimirConQZ = async () => {
-  try {
-    await qz.websocket.connect()
-    const config = qz.configs.create(null) // null = impresora por defecto
-
-    // Armar contenido del ticket en texto ESC/POS
-    const data = [
-      '\x1B\x40', // Reset
-      'Lavandería y Tintorería \nBurbu Clean\n',
-      'Tel: 55 3864 4860 / 55 1894 4538\n',
-      '--------------------------------\n',
-      `Folio: ${pedido.value.id}\n`,
-      `Cliente: ${pedido.value.cliente?.nombre || ''}\n`,
-      `Fecha Recibido: ${formatDate(pedido.value.fechaIngreso)}\n`,
-      `Fecha Entrega: ${formatDate(pedido.value.fechaEntrega)}\n`,
-      '--------------------------------\n',
-      'Detalle de prendas:\n',
-      ...(pedido.value.detalles?.map((d) => `${d.tipoPrenda} (${d.servicio})\n`) || []),
-      '--------------------------------\n',
-      `Total: $${pedido.value.total?.toFixed(2)}\n`,
-      '• El agente no está autorizado para entregar ninguna orden si no está liquidada.\n',
-      '• Toda prenda que venga al servicio de esta casa se considera usada.\n',
-      '• No respondemos por objetos olvidados.\n',
-      '• Todo secado encoge.\n',
-      '• En caso de pérdida, la casa pagará la cuarta parte de la prenda.\n',
-      '• No nos hacemos responsables por pérdida de ropa interior.\n',
-      '• La carga mínima por cobrar será de $50 pesos.\n\n',
-      '\n¡Gracias por su preferencia!\n',
-      '\x1D\x56\x00', // Corte de papel
-    ]
-
-    await qz.print(config, data)
-    $q.notify({ type: 'positive', message: 'Ticket enviado a la impresora térmica' })
-  } catch (err) {
-    console.error('Error al imprimir con QZ Tray:', err)
-    $q.notify({
-      type: 'negative',
-      message: 'No se pudo imprimir con QZ Tray. Verifica que esté instalado y ejecutándose.',
-    })
-  } finally {
-    if (qz.websocket.isActive()) {
-      await qz.websocket.disconnect()
-    }
-  }
 }
 </script>
