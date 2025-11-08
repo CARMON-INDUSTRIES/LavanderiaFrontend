@@ -141,7 +141,7 @@ const imprimirTicket = () => {
 
           body {
             font-family: 'Courier New', monospace;
-            font-size: 12px;
+            font-size: 13px;
             width: 58mm;
             margin: 0;
             padding: 0;
