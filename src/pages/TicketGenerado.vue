@@ -4,7 +4,7 @@
     <div
       id="ticket"
       style="
-        width: 58mm;
+        width: 59mm;
         font-family: 'Courier New', monospace;
         background: white;
         color: black;
@@ -14,8 +14,9 @@
       "
     >
       <div class="text-center">
-        <div class="text-sub-1">
-          Lavandería y Tintorería <br />
+        <div class="text-sub-2">
+          Lavandería y <br />
+          Tintorería <br />
           Burbu Clean
         </div>
         <div style="font-size: 10px">Tel: 55 3864 4860</div>
@@ -23,7 +24,7 @@
         <div style="font-size: 10px">-------------------------------</div>
       </div>
 
-      <div style="font-size: 12px; margin-top: 5px">
+      <div style="font-size: 10px; margin-top: 5px">
         <div><b>Folio:</b> {{ pedido.id }}</div>
         <div><b>Cliente:</b> {{ pedido.cliente?.nombre }}</div>
         <div><b>Recibido:</b> {{ formatDate(pedido.fechaIngreso) }}</div>
@@ -42,27 +43,34 @@
         </div>
       </div>
 
-      <div style="margin-top: 8px; font-size: 12px">
+      <div style="margin-top: 8px; font-size: 11px">
         <div style="text-align: right">
-          <b>A Cuenta: ${{ pedido.aCuenta?.toFixed(2) }}</b>
+          <b>A Cuenta: ${{ pedido.aCuenta?.toFixed(2) }}ㅤㅤㅤ</b>
         </div>
         <div style="text-align: right">
-          <b>Total: ${{ pedido.total?.toFixed(2) }}</b>
+          <b>Total: ${{ pedido.total?.toFixed(2) }}ㅤㅤㅤ</b>
         </div>
       </div>
 
-      <div class="text" style="margin-top: 10px; font-size: 8px">
-        • El agente no está autorizado para
-        <br />entregar ninguna orden si no está liquidada. <br />
-        • Toda prenda que venga al servicio de
-        <br />esta casa se considera usada. <br />
-        • No respondemos por objetos olvidados. <br />
+      <div class="text" style="margin-top: 10px; font-size: 10px">
+        • El agente no está <br />
+        autorizado para entregar <br />
+        ninguna orden si <br />
+        no está liquidada. <br />
+        • Toda prenda que venga al<br />
+        servicio de esta casa se<br />
+        considera usada.<br />
+        • No respondemos por objetos<br />
+        olvidados. <br />
         • Todo secado encoge. <br />
-        • En caso de pérdida, la casa pagará
-        <br />la cuarta parte de la prenda. <br />
-        • No nos hacemos responsables por
-        <br />pérdida de ropa interior. <br />
-        • La carga mínima por cobrar será de $50 pesos. <br />
+        • En caso de pérdida, <br />
+        la casa pagará la cuarta<br />
+        parte de la prenda. <br />
+        • No nos hacemos responsables <br />
+        por pérdida de ropa<br />
+        interior. <br />
+        • La carga mínima por cobrar<br />
+        será de $50 pesos. <br />
 
         <div class="text-left" style="margin-top: 9px; font-size: 9px">
           ¡Gracias por su preferencia!
@@ -122,7 +130,7 @@ const imprimirTicket = () => {
         <title>Ticket</title>
         <style>
           @page {
-            size: 58mm auto;
+            size: 59mm auto;
             margin: 0;
           }
 
