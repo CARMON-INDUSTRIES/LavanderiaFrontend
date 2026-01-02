@@ -15,6 +15,7 @@
         <q-btn flat label="Stock" @click="irA('/stock-pendiente')" />
 
         <q-btn v-if="esAdmin" flat label="Gastos" @click="irA('/gasto')" />
+        <q-btn v-if="esAdmin" flat label="Clientes" @click="irA('/clientes')" />
         <q-btn v-if="esAdmin" flat label="Pagos Empleados" @click="irA('/pago-empleados')" />
         <q-btn v-if="esAdmin" flat label="Resumen Semanal" @click="irA('/resumen-semanal')" />
 

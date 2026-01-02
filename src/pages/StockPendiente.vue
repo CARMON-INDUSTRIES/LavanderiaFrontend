@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page padding style="background-color: #91ffff">
     <q-card>
       <q-card-section class="row items-center q-pb-none">
         <div class="text-h6">Stock de Pedidos</div>
@@ -32,6 +32,7 @@
         :loading="loading"
         class="q-mt-md"
         no-data-label="No hay pedidos"
+        :pagination="{ rowsPerPage: 0 }"
       >
         <!-- Columna Estado con chip clickeable -->
         <template v-slot:body-cell-estado="props">

@@ -27,6 +27,17 @@ const routes = [
     ],
   },
   {
+    path: '/clientes',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('src/pages/ClienteManejo.vue'),
+        meta: { requiresAuth: true },
+      },
+    ],
+  },
+  {
     path: '/registro',
     component: () => import('layouts/MainLayout.vue'),
     children: [

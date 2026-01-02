@@ -19,6 +19,7 @@
           row-key="id"
           :loading="loading"
           no-data-label="No hay pedidos registrados"
+          :pagination="{ rowsPerPage: 0 }"
         >
           <template v-slot:body-cell-acciones="props">
             <q-td :props="props">
